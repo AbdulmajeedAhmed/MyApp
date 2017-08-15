@@ -5,13 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!--To perform network operations-->
 
-   <!-- render tha map and prevent google store from display this map on devices that does not support Ges-->
-<uses-feature
-    android:glEsVersion="0x00020000"
-    android:required="true">
-</uses-feature>
+
 
     <application
         android:allowBackup="true"
@@ -36,18 +32,12 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".GoogleMapsActivity"
-            android:label="@string/title_activity_google_maps">
-
-
-        </activity>
     </application>
 
 </manifest>

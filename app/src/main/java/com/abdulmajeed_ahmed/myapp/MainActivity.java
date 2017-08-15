@@ -12,20 +12,38 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.abdulmajeed_ahmed.myapp.data.model.ApiUtils;
+import com.abdulmajeed_ahmed.myapp.data.model.remote.SOService;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONObject;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout main_content;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private SOService mService; // for Retrofit
+    private TextView jsonTextView;
+    private Button delete_json_button;
+    private JSONObject jsonResponce;
     private ViewPager mViewPager;
-
+    private DatabaseReference mDatabaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        mService = ApiUtils.getSOService(); // for Retrofit
 
         // get the root layout.
         main_content=(CoordinatorLayout)findViewById(R.id.main_content);
@@ -54,11 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about) {
             Snackbar.make(main_content,R.string.about_message,Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -68,25 +82,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
+     *
+     * The enqueue() function send the request and notifies tha app when there is a result,
+     * and this is handled in background thread so thet the main UI Thread won't be blocked.
+     * @param view
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public void getJSON(View view) {
+        jsonTextView= (TextView)findViewById(R.id.json_responce_txt);
+        delete_json_button =(Button) findViewById(R.id.delete_json_button);
 
+        mService.listRepos("http://api.fixer.io/latest").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    jsonResponce= new JSONObject(response.body().string());
+                    String jsonString=jsonResponce.toString();
+                    jsonTextView.setText(jsonString); // display the json
+                    delete_json_button.setVisibility(View.VISIBLE); //display the button to delete.
+
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), R.string.error_try_later,Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+    public void clearJsonResponse(View view) {
+        jsonTextView.setText("");
+        view.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Saves the json responce to the database.
+     * @param view
+     */
+    public void uploadToFirebase(View view) {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(); // firebase database cinnection..
+        if(jsonResponce==null) {
+            Snackbar.make(main_content, R.string.download_json_first, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        try{
+            mDatabaseReference.child("JSON").push().setValue(jsonResponce.toString()).isSuccessful();
+            Snackbar.make(main_content, R.string.json_uploaded, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), R.string.error_try_later, Toast.LENGTH_LONG).show();
+           }
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Fragment getItem(int position) { // my fragments are here..
            switch (position){
                case 0:
-                   JsonTab jsonTab= new JsonTab();
-                   return jsonTab;
+                   return new JsonTab();
                case 1:
-                 //  MapTab mapTab= new MapTab();
-                   MapTab mapTab= new MapTab();
-                   return mapTab;
+                   return new MapTab();
            }
             return null;
         }
@@ -100,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "JSON";
+                    return getString(R.string.json);
                 case 1:
-                    return "Map";
+                    return getString(R.string.map);
             }
             return null;
         }

@@ -20,8 +20,8 @@
             android:id="@+id/read_jason_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/download_json"
-            android:onClick="getJSON"/>
+            android:onClick="getJSON"
+            android:text="@string/download_json" />
 
         <Space
             android:layout_width="match_parent"
@@ -33,7 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upload_json"
-            android:onClick="uploadToFirebase"/>
+            android:onClick="uploadToFirebase"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="18dp" />
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/delete_json_button"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyApp</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="action_about">حول</string>
+    <string name="about_message">تم تطويره بواسطة عبدالمجيد أحمد.</string>
+    <string name="title_activity_google_maps">الخريطة</string>
+    <string name="stc_snippet">أحد فروع شركة STC</string>
+    <string name="stc">STC</string>
+    <string name="map_error_msg">عذرا، لايمكن اظهار الخريطة الآن.</string>
+    <string name="download_json">تحميل JSON</string>
+    <string name="upload_json">رفع JSON</string>
+    <string name="clear">مسح</string>
+    <string name="json">JSON</string>
+    <string name="map">الخريطة</string>
+    <string name="error_try_later">عذرا، يرجى المحاولة في وقت آخر.</string>
+    <string name="json_uploaded">تم رفع الملف بنجاح.</string>
+    <string name="download_json_first">.يرجى تحميل JSON اولا</string>
+
+
+
+</resources>
