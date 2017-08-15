@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    boolean isRunning;
+
     /**
      *
      * The enqueue() function send the request and notifies tha app when there is a result,
@@ -89,26 +91,45 @@ public class MainActivity extends AppCompatActivity {
     public void getJSON(View view) {
         jsonTextView= (TextView)findViewById(R.id.json_responce_txt);
         delete_json_button =(Button) findViewById(R.id.delete_json_button);
-
-        mService.listRepos("http://api.fixer.io/latest").enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    JSONObject jsonResponse = new JSONObject(response.body().string());
-                    jsonString= jsonResponse.toString();
-                    jsonTextView.setText(jsonString); // display the json
-                    delete_json_button.setVisibility(View.VISIBLE); //display the button to delete.
-
-                }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), R.string.error_try_later,Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
+        workOnThread();
     }
+
+    private void workOnThread() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mService.listRepos("http://api.fixer.io/latest").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            final JSONObject jsonResponse = new JSONObject(response.body().string());
+                            jsonString= jsonResponse.toString();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jsonTextView.setText(jsonString); // display the json
+                                    delete_json_button.setVisibility(View.VISIBLE); //display the button to delete.
+                                }
+                            });
+                        }catch (Exception e){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), R.string.error_try_later,Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        }).start();
+    }
+
     public void clearJsonResponse(View view) {
         jsonTextView.setText("");
         view.setVisibility(View.INVISIBLE);
