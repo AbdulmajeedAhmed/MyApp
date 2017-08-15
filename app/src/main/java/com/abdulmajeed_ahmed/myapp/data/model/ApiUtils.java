@@ -1,7 +1,7 @@
 package com.abdulmajeed_ahmed.myapp.data.model;
 
-import com.abdulmajeed_ahmed.myapp.data.model.remote.RetrofitClient;
-import com.abdulmajeed_ahmed.myapp.data.model.remote.SOService;
+import com.abdulmajeed_ahmed.myapp.data.model.remote_service.RetrofitClient;
+import com.abdulmajeed_ahmed.myapp.data.model.remote_service.SOService;
 
 /**
  * Created by Eng. Abdulmajeed Ahmed on 8/15/2017.

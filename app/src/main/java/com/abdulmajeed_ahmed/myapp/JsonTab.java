@@ -17,7 +17,7 @@ public class JsonTab extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =inflater.inflate(R.layout.json_tab,container,false);
+        view =inflater.inflate(R.layout.json_tab,container,false); // inflate...
         return view;
     }
 }

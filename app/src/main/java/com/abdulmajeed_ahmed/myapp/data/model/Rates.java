@@ -354,6 +354,10 @@ public class Rates { //to convert JSON to POJO (Plain Old Java Objects)...
         this.zAR = zAR;
     }
 
+    /**
+     * To display the results in text, I used map tree to save time later.. Should be other way...
+     * @return
+     */
     public TreeMap<Double,String> getAttributesTreeMap(){
         TreeMap<Double,String> tree= new TreeMap();
         tree.put(aUD,"AUD");

@@ -6,7 +6,7 @@
     <string name="action_about">حول</string>
     <string name="about_message">تم تطويره بواسطة عبدالمجيد أحمد.</string>
     <string name="title_activity_google_maps">الخريطة</string>
-    <string name="stc_snippet">أحد فروع شركة STC</string>
+    <string name="stc_snippet">أحد فروع شركة STC في الرياض.</string>
     <string name="stc">STC</string>
     <string name="map_error_msg">عذرا، لايمكن اظهار الخريطة الآن.</string>
     <string name="download_json">تحميل JSON</string>

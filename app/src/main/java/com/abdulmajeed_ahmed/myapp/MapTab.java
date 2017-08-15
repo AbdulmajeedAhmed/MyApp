@@ -26,10 +26,10 @@ public class MapTab extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        originalView = inflater.inflate(R.layout.map_tab, container, false);
-        //inflate layout to this fragment.
+    originalView = inflater.inflate(R.layout.map_tab, container, false);
+    //inflate layout to this fragment.
         return originalView;
-    }
+}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
@@ -52,13 +52,13 @@ public class MapTab extends Fragment {
                         Toast.makeText(originalView.getContext(), R.string.map_error_msg, Toast.LENGTH_LONG).show();
                     }
                     myGoogleMap = googleMap;
-                    myGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                   // myGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng stc = new LatLng(24.758565,46.712784);
                     myGoogleMap.addMarker(new MarkerOptions()
                             .snippet(getString(R.string.stc_snippet))
                             .position(stc)
                             .title(getString(R.string.stc)));
-                    myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(stc,17f));
+                    myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(stc,16f)); // for zooming.
                 }
             });
         }

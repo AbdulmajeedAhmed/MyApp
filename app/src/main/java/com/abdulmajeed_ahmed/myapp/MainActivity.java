@@ -17,8 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.abdulmajeed_ahmed.myapp.data.model.ApiUtils;
-import com.abdulmajeed_ahmed.myapp.data.model.remote.SOService;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.abdulmajeed_ahmed.myapp.data.model.remote_service.SOService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private SOService mService; // for Retrofit
     private TextView jsonTextView;
     private Button delete_json_button;
-    private JSONObject jsonResponce;
+    String jsonString;
     private ViewPager mViewPager;
     private DatabaseReference mDatabaseReference;
     @Override
@@ -95,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    jsonResponce= new JSONObject(response.body().string());
-                    String jsonString=jsonResponce.toString();
+                    JSONObject jsonResponse = new JSONObject(response.body().string());
+                    jsonString= jsonResponse.toString();
                     jsonTextView.setText(jsonString); // display the json
                     delete_json_button.setVisibility(View.VISIBLE); //display the button to delete.
 
@@ -121,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void uploadToFirebase(View view) {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(); // firebase database cinnection..
-        if(jsonResponce==null) {
+        if(jsonString ==null) {
             Snackbar.make(main_content, R.string.download_json_first, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
         try{
-            mDatabaseReference.child("JSON").push().setValue(jsonResponce.toString()).isSuccessful();
+            mDatabaseReference.child("JSON").push().setValue(jsonString).isSuccessful();
             Snackbar.make(main_content, R.string.json_uploaded, Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }catch (Exception e){
             Toast.makeText(getApplicationContext(), R.string.error_try_later, Toast.LENGTH_LONG).show();
